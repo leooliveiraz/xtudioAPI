@@ -1,6 +1,5 @@
 package leorocha.xtudioAPI.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,8 @@ public class ServicoSvc {
 	public void salvar(Servico servico) {
 		servicoRps.save(servico);
 	}
-	public List<Servico>findAll() {
-		return (List<Servico>) servicoRps.findAll();
+	public Iterable<Servico> findAll() {
+		return  servicoRps.findAll();
 	}
 
 	public Servico findById(Integer id) throws Exception {

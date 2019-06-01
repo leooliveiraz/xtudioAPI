@@ -1,5 +1,6 @@
 package leorocha.xtudioAPI.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import leorocha.xtudioAPI.model.Servico;
 import leorocha.xtudioAPI.service.ServicoSvc;
 
 @RestController
-@RequestMapping(path="servico")
+@RequestMapping(path="/servico")
 public class ServicoCtr {
 	@Autowired
 	ServicoSvc servicoSvc;
@@ -42,9 +43,15 @@ public class ServicoCtr {
 	}
 
 	@GetMapping
-	public List<Servico> buscar() {
-		List<Servico> list = servicoSvc.findAll();
-		return list;
+	public List<ServicoDTO> buscar() {
+		Iterable<Servico> list = servicoSvc.findAll();
+		List<ServicoDTO> listDTO  = new ArrayList<>();
+		list.forEach(i -> 
+			listDTO.add(ServicoDTO.builder()
+					.id(i.getId())
+					.nome(i.getNome())
+					.excluido(i.isExcluido()).build()));
+		return listDTO;
 	}
 
 	@GetMapping(path="/{id}")
