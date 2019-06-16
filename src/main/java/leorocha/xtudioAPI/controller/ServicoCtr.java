@@ -3,6 +3,8 @@ package leorocha.xtudioAPI.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +21,9 @@ import leorocha.xtudioAPI.service.ServicoSvc;
 @RestController
 @RequestMapping(path="/servico")
 public class ServicoCtr {
+
+	Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	ServicoSvc servicoSvc;
 	
@@ -30,6 +35,7 @@ public class ServicoCtr {
 				.excluido(false)
 				.build();
 		servicoSvc.salvar(servico);
+		logger.info("Salvando Servico "+dto.toString());
 	}
 	
 	@PutMapping
@@ -40,6 +46,7 @@ public class ServicoCtr {
 				.excluido(false)
 				.build();
 		servicoSvc.salvar(servico);
+		logger.info("Alterando Servico "+dto.toString());
 	}
 
 	@GetMapping
@@ -51,12 +58,14 @@ public class ServicoCtr {
 					.id(i.getId())
 					.nome(i.getNome())
 					.excluido(i.isExcluido()).build()));
+		logger.info("Buscando Servico "+listDTO.toString());
 		return listDTO;
 	}
 
 	@GetMapping(path="/{id}")
 	public Servico buscar(@PathVariable Integer id) throws Exception {
 		Servico entity = servicoSvc.findById(id);
+		logger.info("BuscarServico "+entity.toString());
 		return entity;
 	}
 }

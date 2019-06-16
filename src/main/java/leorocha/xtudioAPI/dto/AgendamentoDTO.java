@@ -3,6 +3,7 @@ package leorocha.xtudioAPI.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 import lombok.Data;
 @Data
@@ -13,7 +14,9 @@ public class AgendamentoDTO {
 	private LocalTime horaInicial;
 	private LocalTime horaFinal;
 	private BigDecimal valor;
-	private FormaPagamentoDTO formaPagamento;
+	private Integer formaPagamento;
+	private Integer funcionario;
+	private List<Integer> servicos;
 	private Boolean pago;
 	private Boolean anamnese;
 	private Boolean confirmado;

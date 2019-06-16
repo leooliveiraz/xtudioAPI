@@ -1,5 +1,6 @@
 package leorocha.xtudioAPI.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import leorocha.xtudioAPI.dto.AgendamentoDTO;
 import leorocha.xtudioAPI.model.Agendamento;
 import leorocha.xtudioAPI.model.FormaPagamento;
+import leorocha.xtudioAPI.model.Funcionario;
+import leorocha.xtudioAPI.model.Servico;
 import leorocha.xtudioAPI.service.AgendamentoSvc;
 
 @RestController
@@ -23,7 +26,12 @@ public class AgendamentoCtr {
 	AgendamentoSvc agendamentoSvc;
 	
 	@PostMapping
-	public void salvar(@RequestBody AgendamentoDTO dto) {
+	public void salvar(@RequestBody AgendamentoDTO dto) throws Exception {
+
+		List<Servico> servicos = new ArrayList<>();
+		if(dto.getServicos() != null && !dto.getServicos().isEmpty()) {
+			dto.getServicos().forEach(s -> {servicos.add(Servico.builder().id(s).build());});
+		}
 		Agendamento entity = Agendamento.builder()
 				.id(dto.getId())
 				.cliente(dto.getCliente())
@@ -31,7 +39,9 @@ public class AgendamentoCtr {
 				.horaInicial(dto.getHoraInicial())
 				.horaFinal(dto.getHoraFinal())
 				.valor(dto.getValor())
-				.formaPagamento(FormaPagamento.builder().id(dto.getId()).build())
+				.formaPagamento(FormaPagamento.builder().id(dto.getFormaPagamento()).build())
+				.funcionario(Funcionario.builder().id(dto.getFuncionario()).build())
+				.servicos(servicos)
 				.pago(dto.getPago())
 				.anamnese(dto.getAnamnese())
 				.confirmado(dto.getConfirmado())
@@ -41,7 +51,13 @@ public class AgendamentoCtr {
 	}
 	
 	@PutMapping
-	public void alterar(@RequestBody AgendamentoDTO dto) {
+	public void alterar(@RequestBody AgendamentoDTO dto) throws Exception {
+		
+		List<Servico> servicos = new ArrayList<>();
+		if(dto.getServicos() != null && !dto.getServicos().isEmpty()) {
+			dto.getServicos().forEach(s -> {servicos.add(Servico.builder().id(s).build());});
+		}
+		System.out.println(dto.toString());
 		Agendamento entity = Agendamento.builder()
 				.id(dto.getId())
 				.cliente(dto.getCliente())
@@ -49,7 +65,9 @@ public class AgendamentoCtr {
 				.horaInicial(dto.getHoraInicial())
 				.horaFinal(dto.getHoraFinal())
 				.valor(dto.getValor())
-				.formaPagamento(FormaPagamento.builder().id(dto.getId()).build())
+				.formaPagamento(FormaPagamento.builder().id(dto.getFormaPagamento()).build())
+				.funcionario(Funcionario.builder().id(dto.getFuncionario()).build())
+				.servicos(servicos)
 				.pago(dto.getPago())
 				.anamnese(dto.getAnamnese())
 				.confirmado(dto.getConfirmado())
@@ -67,6 +85,7 @@ public class AgendamentoCtr {
 	@GetMapping(path="/{id}")
 	public Agendamento buscar(@PathVariable Integer id) throws Exception {
 		Agendamento entity = agendamentoSvc.findById(id);
+		System.out.println(entity.toString());
 		return entity;
 	}
 }
